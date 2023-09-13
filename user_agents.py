@@ -1,5 +1,7 @@
 """
 User agents (for Desktop) functions
+
+Gets user agent list from https://www.useragents.me/
 """
 
 import requests
@@ -47,6 +49,7 @@ def make_from_table(soup):
         'percentage': percent_list
     })
     return df
+
 
 def get_user_agent(save_file=UA_SAVE_FILE):
     """Gets a user agent, weighted by percentage"""
