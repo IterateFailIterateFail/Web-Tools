@@ -1,2 +1,4 @@
 
 user_agent.csv
+config.py
+*.pyc

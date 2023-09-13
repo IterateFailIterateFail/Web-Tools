@@ -2,6 +2,8 @@
 User agents (for Desktop) functions
 
 Gets user agent list from https://www.useragents.me/
+
+Author: Darren Li
 """
 
 import requests
@@ -9,10 +11,9 @@ from bs4 import BeautifulSoup
 import pandas as pd
 from ast import literal_eval
 from random import choices
+from .config import UA_SAVE_FILE, TIMEOUT
 
-TIMEOUT = 15
-#TODO make local config
-UA_SAVE_FILE = 'user_agent.csv'
+__all__ = ['get_user_agent']
 
 
 def make_from_from_json(soup):
@@ -60,18 +61,29 @@ def get_user_agent(save_file=UA_SAVE_FILE):
     return ua
 
 #TODO overwrite
-def make_ua_df(save_file):
+def make_ua_df(save_file=UA_SAVE_FILE, overwrite=False):
     """Make the user_agents.csv file"""
     url = 'https://www.useragents.me/#most-common-desktop-useragents'
-    headers = {
-        'User-Agent':''
-    }
-    resp = requests.get(url,headers=headers, timeout=TIMEOUT)
+
+    # You actually do not need a user agent to access the url
+    # headers = {
+    #     'User-Agent':''
+    # }
+
+    resp = requests.get(url,
+                        #headers=headers, 
+                        timeout=TIMEOUT)
+    
     soup = BeautifulSoup(resp.text, features="lxml")
+
     #ua_df = make_from_from_json(soup)
     ua_df = make_from_table(soup)
-    ua_df.to_csv(save_file, index=False)
+
+    if not save_file.exists() or overwrite:
+        ua_df.to_csv(save_file, index=False)
+    else: 
+        print('Not overriding user agent file.')
 
 if __name__ == "__main__":
-    save_file = UA_SAVE_FILE
-    make_ua_df(save_file)
+
+    make_ua_df()
