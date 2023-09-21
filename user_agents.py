@@ -21,14 +21,14 @@ def make_from_from_json(soup):
     common_div = soup.find('div', id='most-common-desktop-useragents-json-csv')
     json_text = common_div.find('textarea').text
     json_text = literal_eval(json_text)
-    df = pd.DataFrame(json_text).rename(columns={'ua':'user_agent', 'pct': 'percentage'})
+    df = pd.DataFrame(json_text).rename(columns={'ua': 'user_agent', 'pct': 'percentage'})
     return df
 
 
 def make_from_table(soup):
     """Get desktop user agent dataframe from the table"""
 
-    large_div = soup.find('h2', id = 'most-common-desktop-useragents').parent
+    large_div = soup.find('h2', id='most-common-desktop-useragents').parent
     table = large_div.find('table')
     rows = table.find('tbody').find_all('tr')
 
@@ -60,7 +60,7 @@ def get_user_agent(save_file=UA_SAVE_FILE):
     ua = choices(population=user_agents, weights=weights, k=1)[0]
     return ua
 
-#TODO overwrite
+
 def make_ua_df(save_file=UA_SAVE_FILE, overwrite=False):
     """Make the user_agents.csv file"""
     url = 'https://www.useragents.me/#most-common-desktop-useragents'
@@ -76,13 +76,14 @@ def make_ua_df(save_file=UA_SAVE_FILE, overwrite=False):
     
     soup = BeautifulSoup(resp.text, features="lxml")
 
-    #ua_df = make_from_from_json(soup)
+    # ua_df = make_from_from_json(soup)
     ua_df = make_from_table(soup)
 
     if not save_file.exists() or overwrite:
         ua_df.to_csv(save_file, index=False)
     else: 
         print('Not overriding user agent file.')
+
 
 if __name__ == "__main__":
 

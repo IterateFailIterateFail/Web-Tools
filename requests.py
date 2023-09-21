@@ -19,11 +19,10 @@ DEFAULT_HEADERS = {
 DEFAULT_DATA = {}
 
 
-def rand_wait(wait_minimum=5, exp_max=10):
+def rand_wait(wait_minimum=5, exp_max=2):
     """
     Wait function, using random time based on:
         wait_minimum + exp([0, exp_max]) 
-    
     """
     rand_exp = uniform(0, float(exp_max))
     time = wait_minimum + exp(rand_exp)
@@ -35,7 +34,7 @@ def get_(url, headers=DEFAULT_HEADERS, retries=wt.MAX_RETRIES,
     """Wrapper for requests"""
     rand_wait()
 
-    for i in range(retries, 0 , -1):
+    for i in range(retries, 0, -1):
         try:
             resp = requests.get(url, headers=headers, timeout=timeout)
             if resp.ok:
